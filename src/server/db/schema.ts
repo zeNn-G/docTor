@@ -10,6 +10,8 @@ export const userTable = pgTable("user", {
   hashedPassword: text("hashed_password").notNull(),
 });
 
+export type User = typeof userTable.$inferSelect;
+
 export const sessionTable = pgTable("session", {
   id: text("id").primaryKey(),
   userId: text("user_id")

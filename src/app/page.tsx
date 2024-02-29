@@ -3,9 +3,14 @@ import Link from "next/link";
 
 import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default async function Home() {
   noStore();
 
-  return <main></main>;
+  return (
+    <main>
+      <ModeToggle />
+    </main>
+  );
 }

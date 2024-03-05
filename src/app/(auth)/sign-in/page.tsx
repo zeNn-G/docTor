@@ -8,7 +8,12 @@ const SignInPage = async () => {
 
   if (user) redirect("/");
 
-  return <SingInForm />;
+  return (
+    <div className="flex w-full flex-col items-center">
+      <h1 className="text-3xl font-bold">Sign In</h1>
+      <SingInForm />
+    </div>
+  );
 };
 
 export default SignInPage;

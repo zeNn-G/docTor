@@ -10,9 +10,6 @@ import { signUp } from "@/lib/actions";
 import { SubmitButton } from "@/components/submit-button";
 
 export function SingUpForm() {
-  const x = useFormStatus();
-
-  console.log(x);
   const [state, formAction] = useFormState(signUp, null);
 
   return (

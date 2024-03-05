@@ -7,7 +7,12 @@ import { Scrypt } from "lucia";
 import { lucia } from "@/lib/auth";
 import { db } from "@/server/db";
 
-import { type SignupInput, signupSchema } from "@/validators";
+import {
+  type SignupInput,
+  signupSchema,
+  type SigninInput,
+  singinSchema,
+} from "@/validators";
 import { users } from "@/server/db/schema";
 
 import { validateRequest } from "./validate-request";
@@ -68,6 +73,63 @@ export async function signUp(
   const session = await lucia.createSession(insertedUser[0].userId, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
 
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
+
+  return redirect("/");
+}
+
+export async function signIn(
+  _: any,
+  formData: FormData,
+): Promise<ActionResponse<SigninInput>> {
+  const obj = Object.fromEntries(formData.entries());
+
+  const parsed = singinSchema.safeParse(obj);
+
+  if (!parsed.success) {
+    const err = parsed.error.flatten();
+    return {
+      fieldError: {
+        username: err.fieldErrors.username?.[0],
+        password: err.fieldErrors.password?.[0],
+      },
+    };
+  }
+
+  const { username, password } = parsed.data;
+
+  const existingUser = await db.query.users.findFirst({
+    where: (table, { eq }) => eq(table.username, username),
+  });
+
+  if (!existingUser) {
+    return {
+      formError: "Incorrect email or password",
+    };
+  }
+
+  if (!existingUser || !existingUser?.hashedPassword) {
+    return {
+      formError: "Incorrect email or password",
+    };
+  }
+
+  const validPassword = await new Scrypt().verify(
+    existingUser.hashedPassword,
+    password,
+  );
+  if (!validPassword) {
+    return {
+      formError: "Incorrect email or password",
+    };
+  }
+
+  const session = await lucia.createSession(existingUser.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,

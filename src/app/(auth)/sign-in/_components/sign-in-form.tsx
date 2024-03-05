@@ -7,14 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { signUp } from "@/lib/actions";
-import { toast } from "sonner";
+import { signIn } from "@/lib/actions";
 
-export function SingUpForm() {
-  const x = useFormStatus();
-
-  console.log(x);
-  const [state, formAction] = useFormState(signUp, null);
+export function SingInForm() {
+  const [state, formAction] = useFormState(signIn, null);
 
   return (
     <>
@@ -45,7 +41,12 @@ export function SingUpForm() {
             <p className="text-destructive">{state?.fieldError?.password}</p>
           ) : null}
         </div>
-        <Button type="submit">Sign Up</Button>
+        {state?.formError ? (
+          <p className="rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-red-500">
+            {state?.formError}
+          </p>
+        ) : null}
+        <Button type="submit">Sign In</Button>
       </form>
     </>
   );

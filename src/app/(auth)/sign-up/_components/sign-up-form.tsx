@@ -4,11 +4,10 @@ import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { signUp } from "@/lib/actions";
-import { toast } from "sonner";
+import { SubmitButton } from "@/components/submit-button";
 
 export function SingUpForm() {
   const x = useFormStatus();
@@ -45,7 +44,7 @@ export function SingUpForm() {
             <p className="text-destructive">{state?.fieldError?.password}</p>
           ) : null}
         </div>
-        <Button type="submit">Sign Up</Button>
+        <SubmitButton className="w-full"> Sign Up</SubmitButton>
       </form>
     </>
   );

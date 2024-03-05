@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { signIn } from "@/lib/actions";
+import { SubmitButton } from "@/components/submit-button";
 
 export function SingInForm() {
   const [state, formAction] = useFormState(signIn, null);
@@ -46,7 +47,7 @@ export function SingInForm() {
             {state?.formError}
           </p>
         ) : null}
-        <Button type="submit">Sign In</Button>
+        <SubmitButton className="w-full">Log In</SubmitButton>
       </form>
     </>
   );

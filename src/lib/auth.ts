@@ -4,13 +4,9 @@ import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { env } from "@/env.js";
 import { db } from "@/server/db";
 
-import {
-  sessionTable,
-  type User as DbUser,
-  userTable,
-} from "@/server/db/schema";
+import { users, sessions, type User as DbUser } from "@/server/db/schema";
 
-const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);
+const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
 export const lucia = new Lucia(adapter, {
   getSessionAttributes: (/* attributes */) => {

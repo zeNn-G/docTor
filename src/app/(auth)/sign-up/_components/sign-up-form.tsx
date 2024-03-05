@@ -1,4 +1,8 @@
 "use client";
+import React from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,42 +23,45 @@ import {
 
 import { Input } from "@/components/ui/input";
 
-export default function SingUpForm() {
-  const form = useForm<z.infer<typeof signupSchema>>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
-  });
+import { api } from "@/trpc/react";
+import { useFormState } from "react-dom";
+import { signUp } from "@/lib/actions";
+import { Label } from "@/components/ui/label";
 
-  function onSubmit(values: z.infer<typeof signupSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+export default function SingUpForm() {
+  const [state, formAction] = useFormState(signUp, null);
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <form action={formAction} className="mt-5 w-full max-w-xl space-y-8">
+        <div className="space-y-2">
+          <Label>Username</Label>
+          <Input
+            required
+            placeholder="user_1234"
+            name="username"
+            type="text"
+            autoComplete="off"
+          />
+          {state?.fieldError?.username ? (
+            <p className="text-destructive">{state?.fieldError?.username}</p>
+          ) : null}
+        </div>
+
+        <div className="space-y-2">
+          <Label>Password</Label>
+          <Input
+            placeholder="********"
+            type="password"
+            name="password"
+            autoComplete="off"
+          />
+          {state?.fieldError?.password ? (
+            <p className="text-destructive">{state?.fieldError?.password}</p>
+          ) : null}
+        </div>
         <Button type="submit">Submit</Button>
       </form>
-    </Form>
+    </>
   );
 }

@@ -30,8 +30,14 @@ export function UserAvatar({ user }: UserAvatarProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarFallback className="capitalize">
-              {user.username[0]}
+            <AvatarFallback>
+              {`${user.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}${user.surname
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}`}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -40,6 +46,9 @@ export function UserAvatar({ user }: UserAvatarProps) {
         <DropdownMenuLabel className="px-2 py-1.5 text-sm font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user.username}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user.isAdmin ? "Admin" : "User"}
+            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -47,7 +56,7 @@ export function UserAvatar({ user }: UserAvatarProps) {
           className="flex cursor-pointer font-normal"
           onClick={handleSignOut}
         >
-          <span>Çıkış Yap</span>
+          <span>Log Out</span>
           <LogOut className="ml-auto h-5 w-5" />
         </DropdownMenuItem>
       </DropdownMenuContent>

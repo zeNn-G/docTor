@@ -16,6 +16,9 @@ export const lucia = new Lucia(adapter, {
     return {
       id: attributes.id,
       username: attributes.username,
+      name: attributes.name,
+      surname: attributes.surname,
+      isAdmin: attributes.isAdmin,
     };
   },
   sessionExpiresIn: new TimeSpan(30, "d"),

@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
 import { createId } from "@paralleldrive/cuid2";
 
@@ -7,6 +7,10 @@ export const users = pgTable("user", {
     .primaryKey()
     .$defaultFn(() => createId()),
   username: text("username").notNull().unique(),
+  name: text("name").notNull(),
+  surname: text("surname").notNull(),
+  isAdmin: boolean("is_admin").notNull().default(false),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   hashedPassword: text("hashed_password").notNull(),
 });
 

@@ -20,6 +20,7 @@ import { validateRequest } from "./validate-request";
 export interface ActionResponse<T> {
   fieldError?: Partial<Record<keyof T, string | undefined>>;
   formError?: string;
+  success?: boolean;
 }
 
 export async function signUp(
@@ -29,17 +30,21 @@ export async function signUp(
   const obj = Object.fromEntries(formData.entries());
 
   const parsed = signupSchema.safeParse(obj);
+
   if (!parsed.success) {
     const err = parsed.error.flatten();
     return {
       fieldError: {
         username: err.fieldErrors.username?.[0],
         password: err.fieldErrors.password?.[0],
+        name: err.fieldErrors.name?.[0],
+        surname: err.fieldErrors.surname?.[0],
+        isAdmin: err.fieldErrors.isAdmin?.[0],
       },
     };
   }
 
-  const { username, password } = parsed.data;
+  const { username, password, name, surname, isAdmin } = parsed.data;
 
   const existingUser = await db.query.users.findFirst({
     where: (table, { eq }) => eq(table.username, username),
@@ -59,6 +64,9 @@ export async function signUp(
     .values({
       username,
       hashedPassword,
+      name,
+      surname,
+      isAdmin: isAdmin || false,
     })
     .returning({
       userId: users.id,
@@ -70,16 +78,9 @@ export async function signUp(
     };
   }
 
-  const session = await lucia.createSession(insertedUser[0].userId, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  );
-
-  return redirect("/");
+  return {
+    success: true,
+  };
 }
 
 export async function signIn(

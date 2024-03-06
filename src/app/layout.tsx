@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { ThemeProvider } from "@/providers";
@@ -29,7 +30,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`font-geist ${inter.variable} ${GeistSans.variable}`}>
         <TRPCReactProvider>
           <SessionProvider value={session}>
             <ThemeProvider

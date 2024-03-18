@@ -20,6 +20,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 
+import { visitNodesToRawString, visitNodesToMetadata } from "@/utils/MDXVisit";
 import "@/styles/mdx.css";
 
 const prettyCodeOptions: Partial<Options> = {
@@ -60,8 +61,12 @@ const MonacoPage = () => {
           mdxOptions: {
             format: "mdx",
             remarkPlugins: [remarkGfm],
-            // @ts-ignore
-            rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+            rehypePlugins: [
+              visitNodesToRawString,
+              // @ts-ignore
+              [rehypePrettyCode, prettyCodeOptions],
+              visitNodesToMetadata,
+            ],
             development: false,
           },
           parseFrontmatter: true,
@@ -73,8 +78,6 @@ const MonacoPage = () => {
       }
     })();
   }, [debouncedSource]);
-
-  console.log(mdxSource);
 
   return (
     <div>
@@ -90,7 +93,7 @@ const MonacoPage = () => {
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel defaultSize={50} className="h-full w-full">
-          <div className="prose min-w-full">
+          <div className="min-w-full">
             {mdxSource && (
               <MDXRemote {...mdxSource} components={MDXComponents} />
             )}

@@ -7,19 +7,13 @@ import { CheckIcon, CopyIcon } from "lucide-react";
 
 interface CopyButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   value: string;
-  src?: string;
 }
 
 export async function copyToClipboardWithMeta(value: string) {
   navigator.clipboard.writeText(value);
 }
 
-export function CopyButton({
-  value,
-  className,
-  src,
-  ...props
-}: CopyButtonProps) {
+export function CopyButton({ value, className, ...props }: CopyButtonProps) {
   const [hasCopied, setHasCopied] = React.useState(false);
 
   React.useEffect(() => {

@@ -132,16 +132,10 @@ export const components = {
   ),
   pre: ({
     className,
-    __rawString__,
-
-    __withMeta__,
-    __src__,
-
+    raw,
     ...props
   }: React.HTMLAttributes<HTMLPreElement> & {
-    __rawString__?: string;
-    __withMeta__?: boolean;
-    __src__?: string;
+    raw?: string;
   }) => {
     return (
       <CodeWrapper>
@@ -152,12 +146,8 @@ export const components = {
           )}
           {...props}
         />
-        {__rawString__ && (
-          <CopyButton
-            value={__rawString__}
-            src={__src__}
-            className={cn("absolute right-4 top-4", __withMeta__ && "top-16")}
-          />
+        {raw && (
+          <CopyButton value={raw} className={cn("absolute right-4 top-4")} />
         )}
       </CodeWrapper>
     );

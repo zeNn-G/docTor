@@ -10,7 +10,7 @@ const CreateUserPage = async () => {
   if (!user?.isAdmin) redirect("/");
 
   return (
-    <div className="flex w-full flex-col items-center">
+    <div className="container flex w-full max-w-screen-2xl flex-col items-center">
       <h1 className="text-3xl font-bold">Sign Up</h1>
       <SingUpForm />
     </div>

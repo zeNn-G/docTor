@@ -11,7 +11,7 @@ const MainLayout = async ({ children }: React.PropsWithChildren) => {
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
       <Navbar />
-      <main className="container my-2 max-w-screen-2xl flex-1">{children}</main>
+      <main className="my-2 flex-1">{children}</main>
     </div>
   );
 };

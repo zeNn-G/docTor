@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 
-import Editor from "@monaco-editor/react";
-
 import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote } from "next-mdx-remote";
@@ -20,7 +18,10 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 
+import MonacoEditor from "./_components/monaco-editor";
+
 import { visitNodesToRawString, visitNodesToMetadata } from "@/utils/MDXVisit";
+
 import "@/styles/mdx.css";
 
 const prettyCodeOptions: Partial<Options> = {
@@ -80,28 +81,18 @@ const MonacoPage = () => {
   }, [debouncedSource]);
 
   return (
-    <div>
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={50}>
-          <Editor
-            className="h-full min-h-[300px] w-full"
-            defaultLanguage="mdx"
-            theme="vs-dark"
-            defaultValue="# Start writing your MDX here"
-            onChange={handleOnChange}
-          />
-        </ResizablePanel>
+    <ResizablePanelGroup direction="horizontal">
+      <ResizablePanel defaultSize={50}>
+        <MonacoEditor handleOnChange={handleOnChange} />
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={50} className="h-full w-full">
+        <div className="min-w-full">
+          {mdxSource && <MDXRemote {...mdxSource} components={MDXComponents} />}
+        </div>
         <ResizableHandle />
-        <ResizablePanel defaultSize={50} className="h-full w-full">
-          <div className="min-w-full">
-            {mdxSource && (
-              <MDXRemote {...mdxSource} components={MDXComponents} />
-            )}
-          </div>
-          <ResizableHandle />
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 

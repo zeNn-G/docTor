@@ -12,6 +12,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.3.3",
+    "@codemirror/lang-markdown": "^6.2.4",
+    "@codemirror/language-data": "^6.4.1",
     "@hookform/resolvers": "^3.3.4",
     "@lucia-auth/adapter-drizzle": "^1.0.2",
     "@mdxeditor/editor": "^2.13.2",
@@ -32,8 +35,11 @@
     "@trpc/react-query": "^10.45.1",
     "@trpc/server": "^10.45.1",
     "@uidotdev/usehooks": "^2.4.1",
+    "@uiw/codemirror-theme-github": "^4.21.25",
+    "@uiw/react-codemirror": "^4.21.25",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cmdk": "^1.0.0",
     "drizzle-orm": "^0.29.4",
     "geist": "^1.2.2",
     "lucia": "^3.0.1",

@@ -18,11 +18,22 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 
-import MonacoEditor from "./_components/monaco-editor";
+// import MonacoEditor from "./_components/monaco-editor";
 
 import { visitNodesToRawString, visitNodesToMetadata } from "@/utils/MDXVisit";
 
 import "@/styles/mdx.css";
+// import CodeMirrorEditor from "./_components/code-mirror";
+
+import dynamic from "next/dynamic";
+
+const CodeMirrorEditor = dynamic(() => import("./_components/code-mirror"), {
+  ssr: false,
+});
+
+const MonacoEditor = dynamic(() => import("./_components/monaco-editor"), {
+  ssr: false,
+});
 
 const prettyCodeOptions: Partial<Options> = {
   theme: "github-dark",
@@ -84,6 +95,7 @@ const MonacoPage = () => {
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={50}>
         <MonacoEditor handleOnChange={handleOnChange} />
+        {/* <CodeMirrorEditor handleOnChange={handleOnChange} /> */}
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={50} className="h-full w-full">

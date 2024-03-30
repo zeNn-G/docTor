@@ -15,12 +15,11 @@ type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   editorRef: React.MutableRefObject<editor.IStandaloneCodeEditor | null>;
-  monacoRef: React.MutableRefObject<Monaco | null>;
 };
 
-const ComponentSelect = ({ open, setOpen, editorRef, monacoRef }: Props) => {
+const ComponentSelect = ({ open, setOpen, editorRef }: Props) => {
   const addComponent = (component: string) => {
-    if (editorRef.current && monacoRef.current) {
+    if (editorRef.current) {
       const editor = editorRef.current;
       const selection = editor.getSelection();
       const cursorPosition = selection ? selection.getStartPosition() : null;

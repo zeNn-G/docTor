@@ -12,7 +12,6 @@ type Props = {
 const MonacoEditor = ({ handleOnChange }: Props) => {
   const [open, setOpen] = React.useState(false);
   const editorRef = React.useRef<editor.IStandaloneCodeEditor | null>(null);
-  const monacRef = React.useRef<Monaco | null>(null);
 
   const monaco = useMonaco();
 
@@ -34,21 +33,15 @@ const MonacoEditor = ({ handleOnChange }: Props) => {
   return (
     <div className="flex flex-col">
       <ToolBar editorRef={editorRef} />
-      <ComponentSelect
-        open={open}
-        setOpen={setOpen}
-        editorRef={editorRef}
-        monacoRef={monacRef}
-      />
+      <ComponentSelect open={open} setOpen={setOpen} editorRef={editorRef} />
       <Editor
         className="min-h-[300px] w-full"
         defaultLanguage="mdx"
         theme="vs-dark"
         defaultValue="# Start writing your MDX here"
         onChange={handleOnChange}
-        onMount={(editor, monaco) => {
+        onMount={(editor) => {
           editorRef.current = editor;
-          monacRef.current = monaco;
         }}
       />
     </div>

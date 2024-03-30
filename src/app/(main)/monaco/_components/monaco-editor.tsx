@@ -5,6 +5,8 @@ import type { editor } from "monaco-editor";
 import ToolBar from "./tool-bar";
 import ComponentSelect from "@/components/component-select";
 
+import { createDependencyProposals } from "@/utils/code-snippets";
+
 type Props = {
   handleOnChange: (value?: string) => void;
 };
@@ -25,6 +27,21 @@ const MonacoEditor = ({ handleOnChange }: Props) => {
         contextMenuOrder: 1.5,
         run: () => {
           setOpen(true);
+        },
+      });
+
+      monaco.languages.registerCompletionItemProvider("mdx", {
+        provideCompletionItems: (model, position) => {
+          const word = model.getWordUntilPosition(position);
+          const range = {
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: word.startColumn,
+            endColumn: word.endColumn,
+          };
+          return {
+            suggestions: createDependencyProposals(range, monaco),
+          };
         },
       });
     }

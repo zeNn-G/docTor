@@ -99,7 +99,7 @@ const MonacoPage = () => {
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={50} className="h-full w-full">
-        <div className="min-w-full">
+        <div className="min-w-full px-3">
           {mdxSource && <MDXRemote {...mdxSource} components={MDXComponents} />}
         </div>
         <ResizableHandle />

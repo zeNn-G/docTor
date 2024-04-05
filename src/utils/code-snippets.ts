@@ -2,6 +2,7 @@ import {
   codeSnippet,
   linkSnippet,
   orderedListSnippet,
+  tableSnippet,
   tabsSnippet,
   unOrderedListSnippet,
 } from "@/constants/snippet";
@@ -55,6 +56,15 @@ export function createDependencyProposals(
       kind: monaco.languages.CompletionItemKind.Function,
       documentation: "Add Link component",
       insertText: unOrderedListSnippet,
+      insertTextRules:
+        monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      range: range,
+    },
+    {
+      label: "table",
+      kind: monaco.languages.CompletionItemKind.Function,
+      documentation: "Add Link component",
+      insertText: tableSnippet,
       insertTextRules:
         monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
       range: range,

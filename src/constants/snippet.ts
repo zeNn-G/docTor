@@ -29,3 +29,8 @@ export const unOrderedListSnippet = `
 - $2
 - $3
 `;
+
+export const tableSnippet = `
+| Header 1 | Header 2 | Header 3 |
+| -------- | -------- | -------- |
+| $1       | $2       | $3       |`;

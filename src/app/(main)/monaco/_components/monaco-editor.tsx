@@ -47,7 +47,7 @@ const MonacoEditor = ({ handleOnChange }: Props) => {
   }, [monaco]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-[calc(100vh-5rem)] flex-col">
       <ComponentSelect open={open} setOpen={setOpen} editorRef={editorRef} />
       <Editor
         className="h-full w-full"

@@ -96,7 +96,7 @@ const MonacoPage = () => {
       direction="horizontal"
       className="max-h-[calc(100vh-5rem)]"
     >
-      <ResizablePanel defaultSize={50}>
+      <ResizablePanel defaultSize={50} className="px-3">
         <MonacoEditor handleOnChange={handleOnChange} />
         {/* <CodeMirrorEditor handleOnChange={handleOnChange} /> */}
       </ResizablePanel>

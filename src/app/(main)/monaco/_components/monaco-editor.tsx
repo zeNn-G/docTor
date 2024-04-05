@@ -5,6 +5,7 @@ import type { editor } from "monaco-editor";
 import ComponentSelect from "@/components/component-select";
 
 import { createDependencyProposals } from "@/utils/code-snippets";
+import { useTheme } from "next-themes";
 
 type Props = {
   handleOnChange: (value?: string) => void;
@@ -13,6 +14,7 @@ type Props = {
 const MonacoEditor = ({ handleOnChange }: Props) => {
   const [open, setOpen] = React.useState(false);
   const editorRef = React.useRef<editor.IStandaloneCodeEditor | null>(null);
+  const { resolvedTheme } = useTheme();
 
   const monaco = useMonaco();
 
@@ -52,7 +54,9 @@ const MonacoEditor = ({ handleOnChange }: Props) => {
       <Editor
         className="h-full w-full"
         defaultLanguage="mdx"
-        theme="vs-dark"
+        options={{
+          theme: resolvedTheme === "dark" ? "vs-dark" : "vs",
+        }}
         defaultValue="# Start writing your MDX here"
         onChange={handleOnChange}
         onMount={(editor) => {

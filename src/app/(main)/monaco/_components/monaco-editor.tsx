@@ -2,7 +2,7 @@ import React from "react";
 
 import { Editor, Monaco, useMonaco } from "@monaco-editor/react";
 import type { editor } from "monaco-editor";
-import ToolBar from "./tool-bar";
+import { ToolBar } from "./tool-bar";
 import ComponentSelect from "@/components/component-select";
 
 import { createDependencyProposals } from "@/utils/code-snippets";

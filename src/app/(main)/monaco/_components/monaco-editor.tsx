@@ -50,7 +50,7 @@ const MonacoEditor = ({ handleOnChange }: Props) => {
     <div className="flex flex-col">
       <ComponentSelect open={open} setOpen={setOpen} editorRef={editorRef} />
       <Editor
-        className="min-h-[300px] w-full"
+        className="h-full w-full"
         defaultLanguage="mdx"
         theme="vs-dark"
         defaultValue="# Start writing your MDX here"

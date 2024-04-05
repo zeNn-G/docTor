@@ -92,14 +92,17 @@ const MonacoPage = () => {
   }, [debouncedSource]);
 
   return (
-    <ResizablePanelGroup direction="horizontal">
+    <ResizablePanelGroup
+      direction="horizontal"
+      className="max-h-[calc(100vh-5rem)]"
+    >
       <ResizablePanel defaultSize={50}>
         <MonacoEditor handleOnChange={handleOnChange} />
         {/* <CodeMirrorEditor handleOnChange={handleOnChange} /> */}
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSize={50} className="h-full w-full">
-        <div className="min-w-full px-3">
+      <ResizablePanel defaultSize={50} className="w-full">
+        <div className="h-full min-w-full overflow-y-auto px-3">
           {mdxSource && <MDXRemote {...mdxSource} components={MDXComponents} />}
         </div>
         <ResizableHandle />

@@ -27,6 +27,15 @@ export function MainNav({ user }: NavProps) {
             Create User
           </Link>
         )}
+        <Link
+          href="/monaco"
+          className={cn(
+            "transition-colors hover:text-foreground/80 ",
+            pathname === "/monaco" ? "text-foreground" : "text-foreground/60",
+          )}
+        >
+          Editor
+        </Link>
       </nav>
     </div>
   );

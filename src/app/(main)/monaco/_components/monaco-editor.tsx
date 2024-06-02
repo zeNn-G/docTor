@@ -1,15 +1,20 @@
 import React from "react";
 
 import { Editor, useMonaco } from "@monaco-editor/react";
-import type { editor } from "monaco-editor";
+import { editor } from "monaco-editor";
 import ComponentSelect from "@/components/component-select";
 
 import { createDependencyProposals } from "@/utils/code-snippets";
 import { useTheme } from "next-themes";
 
-import { getHighlighter } from "shiki";
+import { wireTmGrammars } from "monaco-editor-textmate";
+import { Registry } from "monaco-textmate";
+import { loadWASM } from "onigasm";
+import defineTheme from "@/utils/define-theme";
 
-import { normalizeColor } from "@/utils/shiki";
+//public folder
+import themeDark from "../../../../../public/github-dark-theme.json";
+import themeLight from "../../../../../public/github-light.theme.json";
 
 type Props = {
   handleOnChange: (value?: string) => void;
@@ -53,6 +58,82 @@ const MonacoEditor = ({ handleOnChange }: Props) => {
     }
   }, [monaco]);
 
+  React.useEffect(() => {
+    if (monaco) {
+      const loadGrammar = async () => {
+        try {
+          await loadWASM("/onigasm.wasm");
+
+          const registry = new Registry({
+            getGrammarDefinition: async (scopeName) => {
+              switch (scopeName) {
+                case "source.mdx":
+                  return {
+                    format: "json",
+                    content: await (await fetch(`/mdx.tmLanguage.json`)).text(),
+                  };
+                case "source.ts":
+                  return {
+                    format: "json",
+                    content: await (
+                      await fetch(`/typescript.tmLanguage.json`)
+                    ).text(),
+                  };
+                case "source.tsx":
+                  return {
+                    format: "json",
+                    content: await (await fetch(`/tsx.tmLanguage.json`)).text(),
+                  };
+                case "source.js":
+                  return {
+                    format: "json",
+                    content: await (
+                      await fetch(`/javascript.tmLanguage.json`)
+                    ).text(),
+                  };
+                case "source.json":
+                  return {
+                    format: "json",
+                    content: await (
+                      await fetch(`/json.tmLanguage.json`)
+                    ).text(),
+                  };
+                default:
+                  return { format: "json", content: {} };
+              }
+            },
+          });
+
+          const grammars = new Map();
+          grammars.set("mdx", "source.mdx");
+          grammars.set("typescript", "source.ts");
+          grammars.set("typescriptreact", "source.tsx");
+          grammars.set("javascript", "source.js");
+          grammars.set("json", "source.json");
+
+          monaco.languages.register({ id: "mdx" });
+          monaco.languages.register({ id: "typescript" });
+          monaco.languages.register({ id: "typescriptreact" });
+          monaco.languages.register({ id: "javascript" });
+          monaco.languages.register({ id: "json" });
+
+          defineTheme(monaco, themeDark, "github-dark");
+          defineTheme(monaco, themeLight, "github-light");
+
+          if (editorRef.current) {
+            await wireTmGrammars(monaco, registry, grammars, editorRef.current);
+          }
+
+          setIsThemeLoaded(true);
+        } catch (error) {
+          console.error("Error loading grammars or WASM", error);
+        }
+      };
+
+      loadGrammar();
+    }
+  }, [monaco]);
+
   return (
     <div className="flex h-[calc(100vh-5rem)] flex-col">
       <ComponentSelect open={open} setOpen={setOpen} editorRef={editorRef} />
@@ -69,73 +150,6 @@ const MonacoEditor = ({ handleOnChange }: Props) => {
         }}
         onMount={(editor) => {
           editorRef.current = editor;
-        }}
-        beforeMount={async (monaco) => {
-          const highlighter = await getHighlighter({
-            themes: ["github-dark", "github-light"],
-            langs: ["mdx"],
-          });
-
-          const darkTheme = highlighter.getTheme("github-dark");
-          const lightTheme = highlighter.getTheme("github-light");
-
-          const darkThemeRules = darkTheme.settings.map((setting) => {
-            if (setting.scope) {
-              if (Array.isArray(setting.scope)) {
-                return setting.scope.map((scope) => {
-                  return {
-                    token: scope,
-                    foreground: normalizeColor(setting.settings.foreground),
-                    background: normalizeColor(setting.settings.background),
-                  };
-                });
-              }
-            }
-            return {
-              token: setting.scope ?? "",
-              foreground: normalizeColor(setting.settings.foreground),
-              background: normalizeColor(setting.settings.background),
-            };
-          });
-
-          const lightThemeRules = lightTheme.settings.map((setting) => {
-            if (setting.scope) {
-              if (Array.isArray(setting.scope)) {
-                return setting.scope.map((scope) => {
-                  return {
-                    token: scope,
-                    foreground: normalizeColor(setting.settings.foreground),
-                    background: normalizeColor(setting.settings.background),
-                  };
-                });
-              }
-            }
-            return {
-              token: setting.scope ?? "",
-              foreground: normalizeColor(setting.settings.foreground),
-              background: normalizeColor(setting.settings.background),
-            };
-          });
-
-          monaco.editor.defineTheme("github-dark", {
-            base: "vs-dark",
-            inherit: true,
-            rules: [...darkThemeRules.flat()],
-            colors: {
-              ...darkTheme.colors,
-            },
-          });
-
-          monaco.editor.defineTheme("github-light", {
-            base: "vs-dark",
-            inherit: true,
-            rules: [...lightThemeRules.flat()],
-            colors: {
-              ...lightTheme.colors,
-            },
-          });
-
-          setIsThemeLoaded(true);
         }}
       />
     </div>
